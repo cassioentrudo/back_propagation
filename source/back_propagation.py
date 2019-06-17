@@ -15,66 +15,64 @@ def sigmoid(z):
 
 
 def propagation(network, instances):
-    print("[back_propagation] propagation")
-    num_inputs = network.layers[0] #numero de entradas
-    print("[back_propagation] Numero de entradas:", num_inputs)
+    print("\n\n############################# [back_propagation] propagation #############################")
     
-#    for weight in networ.weights:
-        
-    
-    
+
     for instance in instances:
         print("instance:", instance)
         atribbutes = instance.split(";")        
-        print("input_and_output:", atribbutes)
-        
         
         inputs = []
         inputs.append(atribbutes[0])
-        print("inputs:", inputs)
-        
         
         outputs = []
         outputs .append(atribbutes[1])
-        print("outputs:", outputs)
-
+        
     
         # para cada camada, calcula a e z
-        for layer in network.layers:
-            print("layer:", layer)
+        for i in range(len(network.layers)-1):
+            print("\n\n########################################################################")
+            print("layer:", network.layers[i])            
+            print("[back_propagation] Numero de entradas:", network.layers[i+1]) 
+            print("[back_propagation] Numero de camadas:", network.layers[i]) 
+            
             
             #criando vetor a
-            a = np.zeros((int(layer) + 1, 1), dtype=np.float64)
-            a[0] = 1 #bias
-          
-            
-            print(inputs)
-            i = 0
+            v_a = np.zeros((int(network.layers[i])+1, 1), dtype=np.float64)
+            v_a[0] = 1 #bias
+            _i = 0
             for inp in inputs:
                 print("inp",inp)
-                a[i + 1] = inp
-                i+=1
+                v_a[_i + 1] = inp
+                _i+=1
+                
+            print("v_a=", v_a)
+                
+            
+            #vetor com pesos
+            v_weights = np.zeros((int(network.layers[i+1]), int(network.layers[i]) + 1), dtype=np.float64)
+            print("v_weights", v_weights)
+#           
+            print("network.weights", network.weights)
+            
+            weights = []
+            for line_weights in network.weights.split(';'):
+                print("line_weights", line_weights)
+                for n in line_weights.split(','):
+                    #weights.append(n))
+                    print("n",n)
+                        
+            
+            for l in range(int(network.layers[i+1])):
+                for j in range(int(network.layers[i]) + 1):
+                    print("weights[l])=", weights[l])
+                    v_weights[i][j] = float(weights[l])
+#                
+#                
+#            v_weights = str(network.weights).split(';')
+#            print("new_v_weights", v_weights)
                 
         
-        
-        
-        
-#    
-#    network.a = np.zeros((int(num_inputs) + 1, 1), dtype=np.float64) #cria vetor a com
-#    network.a[0] = 1; #bias
-#    
-#    for instance in instances:
-#        print("instance:", instance)
-#        
-#        input_output = instance.split(';')
-#        inpu = input_output.split(',')[0]
-
-        
-        
-#        for i in range(len(input_output)):
-#            print(network.a[i+1],inputs[i])
-#            network.a[i+1] = input_outputß[i]
-    
-
-
+            #vetor intermediário z
+            #v_z = 
         

@@ -18,7 +18,7 @@ class Network:
         self.a = []
         
         #pesos
-        self.weights = []
+        self.weights = weights
         
         #vetor intermediario z
         self.z = []
