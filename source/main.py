@@ -7,9 +7,16 @@ Created on Tue Jun 11 20:41:09 2019c
 """
 
 import sys
+import k_folds
+from DadosTreinamento import table
 import back_propagation
-
 from network import Network
+
+numFolds=10
+
+def main():
+    folds = k_folds.k_folding(table, numFolds, table.columns[table.columns.size-1])
+    initialize_network()
   
 def initialize_network():
     print("[main] Inicializando rede")
@@ -56,4 +63,5 @@ def initialize_network():
     back_propagation.propagation(network, instances)
     
         
-initialize_network()
+if __name__ == "__main__":
+    main()
