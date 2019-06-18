@@ -3,6 +3,7 @@ import pandas as pd
 
 
 isNumeric = True
+isTest = True
 #tablePath = "..\data\wine.data"
 #tablePath = "..\data\ionosphere.data"
 
@@ -14,10 +15,10 @@ tablePath = "../data/dataset_1.txt"
 neural_network_structure = [0.000, 1, 2, 1 ]
 
 def DataRead(str1):
-    if(isNumeric==True):    
-        dataTable = pd.read_csv("%s" % str1,header=None, sep="/s*/,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
+    if(isTest==False):
+        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     else:
-        dataTable = pd.read_csv("%s" % str1, sep="\s*\;",  engine='python')
+        dataTable = pd.read_csv("%s" % str1,header=None, sep=";",  engine='python')
     return dataTable
 
 def normalizeTable(table, minNumber, maxNumber):
@@ -48,14 +49,16 @@ if(tablePath == "wdbc.data"):
     table = table.drop(columns="B")
     table["result"]=aux
 
-if (tablePath == "wine.data"):
+if (tablePath == "..\data\wine.data"):
     aux = table["A"]
     table = table.drop(columns="A")
-    for x in range(len(aux)):
-       aux.iloc[x]=names.get(aux.iloc[x])
+    #for x in range(len(aux)):
+    #   aux.iloc[x]=names.get(aux.iloc[x])
+    aux = aux - 2
     table["result"]=aux
     
-normalizeTable(table,-1,1)
+if (isTest == False):
+    normalizeTable(table,-1,1)
 
-    
+
     
