@@ -47,7 +47,50 @@ def inputs_propagation(network, instance, inputs):
         inputs = new_inputs
             
     return new_inputs
+ 
+def backPropagation(network, fx, y):
+    
+    delta_y = np.array()
+    delta_k = np.array()
+    D  = np.array()    
+    aux = np.array()    
+    for i in range(len(fx)):
+        delta_y = fx[i] - y[i]
+    
+    for k in range(network.layers_size, 1, -1):
         
+        aux = np.multiply((np.dot(np.transpose(network.layers[k]), delta_y[k + 1]), network.a[k], /) 
+        delta_k = np.multiply( aux, (1 - network.a[k]), /)
+        
+        delta_y[k] = delta_k[1:]
+    
+    for j in range(network.layers_size, 0, -1):
+        D[j] += np.dot(delta_y[j + 1], np.transpose(network.a[j]))
+        
+
+    return delta_y, D
+    
+
+def regularization(network, D): 
+    
+    P  = np.array()
+    
+    for k in range(network.layers_size, 0, -1):
+        layersReg = np.matrix(network.layers[k - 1][:])
+        layersReg[:, 0] = np.zeros(len(layersReg[0]))
+        P[k] = np.multiply( network.lmbda, layersReg, /)
+        D[k] = (1.0 / len(table)) * (D[k] + P[k])
+        
+        
+
+    
+    
+ def update_layers(alpha, network , D):
+     for k in range(network.layers_size, 0, -1):
+         network.layers[k] -= np.multiply(alpha, D[k], /)
+     
+     
+      
 
 def execute(network, instances):
     for instance in instances:
