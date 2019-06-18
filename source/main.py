@@ -7,8 +7,8 @@ Created on Tue Jun 11 20:41:09 2019c
 """
 
 import sys
-#import k_folds
-#from DadosTreinamento import table
+import k_folds
+from DadosTreinamento import table
 import back_propagation
 from network import Network
 import numpy as np

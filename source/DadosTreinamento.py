@@ -5,7 +5,7 @@ import pandas as pd
 isNumeric = True
 #tablePath = "wdbc.data"
 #tablePath = "wine.data"
-tablePath = "ionosphere.data"
+tablePath = "..\data\ionosphere.data"
 
 def DataRead(str1):
     if(isNumeric==True):
