@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*- 
 from DadosTreinamento import table
 import pandas as pd
 

@@ -6,7 +6,7 @@ Created on Tue Jun 11 20:47:11 2019
 @author: cassio
 """
 
-class Network:
+class Neural_Network:
     def __init__(self, lmbda, layers_size, layers):
         #fator de regularização
         self.lmbda = lmbda 

@@ -1,15 +1,21 @@
+# -- coding: utf-8 --
 import pandas as pd
 
 
-#tablePath = "dadosBenchmark_validacaoAlgoritmoAD.csv"
 isNumeric = True
-#tablePath = "wdbc.data"
-#tablePath = "wine.data"
-tablePath = "..\data\ionosphere.data"
+#tablePath = "..\data\wine.data"
+#tablePath = "..\data\ionosphere.data"
+
+
+tablePath = "../data/dataset_1.txt"
+#tablePath = "..\data\dataset_2.data"
+
+#vetor que contem a estrutura da rede (camadas e neuronios por camada)
+neural_network_structure = [0.000, 1, 2, 1 ]
 
 def DataRead(str1):
-    if(isNumeric==True):
-        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
+    if(isNumeric==True):    
+        dataTable = pd.read_csv("%s" % str1,header=None, sep="/s*/,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     else:
         dataTable = pd.read_csv("%s" % str1, sep="\s*\;",  engine='python')
     return dataTable
