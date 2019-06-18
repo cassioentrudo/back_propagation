@@ -59,8 +59,8 @@ def backPropagation(network, fx, y):
     
     for k in range(network.layers_size, 1, -1):
         
-        aux = np.multiply((np.dot(np.transpose(network.layers[k]), delta_y[k + 1]), network.a[k], /) 
-        delta_k = np.multiply( aux, (1 - network.a[k]), /)
+        aux = np.multiply( np.dot(np.transpose(network.layers[k]), delta_y[k + 1]), network.a[k]) 
+        delta_k = np.multiply( aux, (1 - network.a[k]))
         
         delta_y[k] = delta_k[1:]
     
@@ -78,16 +78,16 @@ def regularization(network, D):
     for k in range(network.layers_size, 0, -1):
         layersReg = np.matrix(network.layers[k - 1][:])
         layersReg[:, 0] = np.zeros(len(layersReg[0]))
-        P[k] = np.multiply( network.lmbda, layersReg, /)
+        P[k] = np.multiply( network.lmbda, layersReg)
         D[k] = (1.0 / len(table)) * (D[k] + P[k])
         
         
 
     
     
- def update_layers(alpha, network , D):
-     for k in range(network.layers_size, 0, -1):
-         network.layers[k] -= np.multiply(alpha, D[k], /)
+def update_layers(alpha, network , D):
+    for k in range(network.layers_size, 0, -1):
+        network.layers[k] -= np.multiply(alpha, D[k])
      
      
       
