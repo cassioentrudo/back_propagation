@@ -7,18 +7,18 @@ Created on Tue Jun 11 20:47:11 2019
 """
 
 class Network:
-    def __init__(self, lmbda, layers, weights):
+    def __init__(self, lmbda, layers_size, layers):
         #fator de regularização
         self.lmbda = lmbda 
         
         #camadas
-        self.layers = layers
+        self.layers_size = layers_size
         
         #ativações
         self.a = []
         
-        #pesos
-        self.weights = weights
+        #layer propriamente dito, com neurônios e pesos
+        self.layers = layers
         
         #vetor intermediario z
         self.z = []

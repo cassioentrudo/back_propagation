@@ -7,16 +7,17 @@ Created on Tue Jun 11 20:41:09 2019c
 """
 
 import sys
-import k_folds
-from DadosTreinamento import table
+#import k_folds
+#from DadosTreinamento import table
 import back_propagation
 from network import Network
+import numpy as np
 
 numFolds=10
 
-def main():
-    folds = k_folds.k_folding(table, numFolds, table.columns[table.columns.size-1])
-    initialize_network()
+#def main():
+#    folds = k_folds.k_folding(table, numFolds, table.columns[table.columns.size-1])
+#    initialize_network()
   
 def initialize_network():
     print("[main] Inicializando rede")
@@ -26,28 +27,36 @@ def initialize_network():
     
     #Leitura do arquivo network_file (estrutura da rede, número de camadas, quantidade de neurônios, etc)
     f = open(network_file, "r")
-    network_file_lines = f.read().splitlines()
+    network_file_lines = f.readlines()
     #primeira linha é o fator de regularização
     network_lambda = float(network_file_lines[0])
     
-    #cria cada linha sendo uma camada e o valor da linha sendo a quantidade de neurônios
-    layers = []
+    #ada linha sendo uma camada e o valor da linha sendo a quantidade de neurônios
+    layers_size = []
     for neurons in network_file_lines[1:]: 
         print("[main] camada com", neurons, "neuronio")
-        layers.append(neurons)
+        layers_size.append(int(neurons))
 
     #Leitura do arquivo initial_weights_file (pesos iniciais)
-    weights = []
     f = open(initial_weights_file, "r")
-    initial_weights_file_lines = f.read().splitlines()
+    initial_weights_file_lines = f.readlines()
 
-    for weight in initial_weights_file_lines:
-        print("[main] peso", weight)
-        weights.append(weight)
+    layers = [] # camadas
+    for line in initial_weights_file_lines:
+        neurons = line.split(';')
+        v_neurons = []
+        for neuron in neurons:
+            weights = neuron.split(',')
+            v_weights = []
+            for weight in weights: #pesos de cada neurônio
+                v_weights.append(float(weight))
+            v_neurons.append(v_weights)
+        layers.append(np.array(v_neurons)) #cada camada tem seus neurônios que contém seus pesos
+        
         
     instances = []
     f = open(dataset_file, "r")
-    dataset_file_lines = f.read().splitlines()
+    dataset_file_lines = f.readlines()
     for instance in dataset_file_lines:
         print("[main] instance:", instance)
         instances.append(instance)
@@ -57,11 +66,13 @@ def initialize_network():
     print("[main] Quantidade de camadas:", len(layers))
     
     #estrutura geral da rede
-    network = Network(network_lambda, layers, weights)
+    network = Network(network_lambda, layers_size, layers)
     
     #chama algoritmo de bajpropagation passando a rede e as instancias de treinamento
-    back_propagation.propagation(network, instances)
+    back_propagation.execute(network, instances)
     
         
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+#    main()
+    
+initialize_network()
