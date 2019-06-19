@@ -22,3 +22,11 @@ class Neural_Network:
         
         #vetor intermediario z
         self.z = []
+        
+    def PrintNetwork(self):
+        print("*******NODO*******")
+        print("lmbda =", self.lmbda)
+        print("layers_size =", self.layers_size)
+        print("a =", self.a)
+        print("z =", self.z)
+        print("********************")
