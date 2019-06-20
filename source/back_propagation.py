@@ -128,22 +128,38 @@ def update_layers(alpha, network , D):
      
       
 
-def execute(network, instances):
+def execute(network, instances, isTest):
     D=[]
     inst = -1
+    
     for instance in instances:
-        inst = inst +1
-        inputs_outputs = instance.split(";")
-        
         inputs = []
-        for inpts in inputs_outputs[0].split(','):
-            print("inpts:", inpts)
-            inputs.append(float(inpts))
-
         outputs = []
-        for outpts in inputs_outputs[1].split(','):
+        
+        inst = inst +1
+        
+        print("isTest=", isTest)
+                       
+        if(isTest):
+            inputs_outputs = instance.split(";")    
+            
+            for inpts in inputs_outputs[0].split(','):
+                print("inpts:", inpts)
+                inputs.append(float(inpts))
+
+        
+            for outpts in inputs_outputs[1].split(','):
+                print("outpts:", outpts)
+                outputs.append(float(outpts))
+        else:
+            inputs_outputs = instance.split(",")   
+            for i in range(len(inputs_outputs) - 1):
+                print("inpts:", inputs_outputs[i])
+                #inputs.append(float(inpts))
+
+        
+            outpts = inputs_outputs[-1]
             print("outpts:", outpts)
-            outputs.append(float(outpts))
         
         fx = np.round(inputs_propagation(network, instance, inputs),5)
         
