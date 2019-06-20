@@ -18,10 +18,12 @@ def error_j(fx, expected, size_dataset):
     y = np.array(expected)
     j_vector = -y * np.log(fx) - (np.ones(len(y)) - y) * np.log(np.ones(len(y)) - fx)
     j = np.sum(j_vector)
-    #j /= size_dataset
+    j /= size_dataset
     return j
 
 def inputs_propagation(network, instance, inputs):
+    auxa = []
+    auxz = []
     for i in range(len(network.layers_size)-1):
         print("\n\n########################################################################")
         print("layer:", i+1)            
@@ -30,12 +32,12 @@ def inputs_propagation(network, instance, inputs):
         #criando vetor a
         a = np.zeros((int(network.layers_size[i])+1, 1), dtype=np.float64)
         a[0] = 1 #bias
-
+        
         for j in range(len(inputs)):
             print("input=", np.round(inputs[j], 5))
             a[j + 1] = np.round(inputs[j],5)
+        auxa.append(a)
         print("vetor_a=", a)
-        network.a.append(a)
             
         #vetor com pesos
         layer = network.layers[i]
@@ -43,88 +45,105 @@ def inputs_propagation(network, instance, inputs):
         #print("layer_T=", np.transpose(layer))
         z = np.dot(layer, a)
         print("vetor_z=", z)
-        network.z.append(z)
+        auxz.append(z)
 
         new_inputs = sigmoid(z)
         #print("out", new_inputs)
         inputs = new_inputs
-    network.a.append(inputs)
-            
+    auxa.append(inputs)
+    network.a.append(auxa)
+    network.z.append(auxz)
     return new_inputs
  
-def backPropagation(network, fx, y):
+def backPropagation(network, fx, y, inst):
     
-    delta_y = np.array([])
-    delta_k = np.array([])
-    D  = np.array([])    
-    aux = np.array([])
-    for i in range(len(fx)):
-        delta_y = fx[i] - y[i]
+    delta_y = []
+    container = []
+    delta_k = []
+    D  = []
+    aux = []
+    for i in range(len(network.layers)-1):
+        
+        container.extend(np.around(fx[i] - y[i],5))
+    delta_y.append(container)
     
     for k in range(len(network.layers_size)-1, 1, -1):
         
-        aux = np.multiply( np.dot(np.transpose(network.layers[k-1]), delta_y[0]), network.a[k]) 
-        delta_k = np.multiply( aux, (1 - network.a[k]))
-        
-        delta_y[k] = delta_k[1:]
+        aux = np.multiply( np.dot(np.transpose(network.layers[k-1]), delta_y[-1]), network.a[inst][k-1]) 
+        aux = np.multiply( aux, (1 - network.a[inst][k-1]))
+        for k in range(1,len(aux)):
+            delta_k.extend(np.around([aux[k][k]],5))
+        aux = []  #limpa
+        delta_y.append(delta_k)
+        delta_k = []        #limpa
     
     for j in range(len(network.layers_size)-1, 0, -1):
-        D[j] += np.dot(delta_y[j + 1], np.transpose(network.a[j]))
+        #np.insert(D,j, D[j] + (delta_y[(len(network.layers_size)-1)-j]*np.transpose(network.a[j])))
+        transposta = np.transpose(network.a[inst][j-1])
+        delta = np.array(delta_y[len(network.layers_size)-1-j])
+        delta = np.reshape(delta,(len(delta),1))
+        print("D= ", delta_y[(len(network.layers_size)-1)-j], "\n transposta da a: ", transposta)
+        D.append(np.dot(delta, transposta))
         
-
     return delta_y, D
     
 
-def regularization(network, D): 
+def regularization(network, D, instances): 
     
-    P  = np.array()
+    P  = []
     
     for k in range(len(network.layers_size)-1, 0, -1):
         layersReg = np.matrix(network.layers[k - 1][:])
         layersReg[:, 0] = np.zeros(len(layersReg[0]))
-        P[k] = np.multiply( network.lmbda, layersReg)
-        D[k] = (1.0 / len(table)) * (D[k] + P[k])
+        layersReg=network.lmbda*layersReg
+        P.append(layersReg)
+    
+    
+    norm = []
+    for k in range(len(P)):
+        norm.extend([0])
         
+    for inst in range(len(instances)):
+        for k in range(len(P)):
+            norm[len(P)-1-k] = D[inst][k] + norm[len(P)-1-k]
+            
+    for k in range(len(P)):
+        aux = ([(1.0 / len(instances)) * (norm[len(P)-1-k] + P[k])])
+        norm[len(P)-1-k] =  aux
+            
+            #if (norm[len(P)-1-k]==0):
+            #    aux = ([(1.0 / len(instances)) * (D[inst][k] + P[k] + norm[len(P)-1-k])])
+            #else:
+            #    aux = ([(1.0 / len(instances)) * (D[inst][k] + P[k] + norm[len(P)-1-k][0])])
+            #norm[len(P)-1-k] =  aux
         
+    return norm
 
     
     
 def update_layers(alpha, network , D):
     for k in range(len(network.layers_size)-1, 0, -1):
-        network.layers[k] -= np.multiply(alpha, D[k])
+        network.layers[k-1] = network.layers[k-1] - alpha*D[k-1][0]
      
      
       
 
-def execute(network, instances, isTest):
+def execute(network, instances):
+    D=[]
+    inst = -1
     for instance in instances:
+        inst = inst +1
+        inputs_outputs = instance.split(";")
+        
         inputs = []
+        for inpts in inputs_outputs[0].split(','):
+            print("inpts:", inpts)
+            inputs.append(float(inpts))
+
         outputs = []
-        
-        print("isTest=", isTest)
-                       
-        if(isTest):
-            inputs_outputs = instance.split(";")    
-            
-            for inpts in inputs_outputs[0].split(','):
-                print("inpts:", inpts)
-                inputs.append(float(inpts))
-
-        
-            for outpts in inputs_outputs[1].split(','):
-                print("outpts:", outpts)
-                outputs.append(float(outpts))
-        else:
-            inputs_outputs = instance.split(",")   
-            for i in range(len(inputs_outputs) - 1):
-                print("inpts:", inputs_outputs[i])
-                #inputs.append(float(inpts))
-
-        
-            outpts = inputs_outputs[-1]
+        for outpts in inputs_outputs[1].split(','):
             print("outpts:", outpts)
-            #outputs.append(float(outpts))
-        
+            outputs.append(float(outpts))
         
         fx = np.round(inputs_propagation(network, instance, inputs),5)
         
@@ -134,6 +153,9 @@ def execute(network, instances, isTest):
         error = error_j(fx, outputs, len(instances))
         print("erro J calculado=", error)
         
-#        network.PrintNetwork()
-#        delta_y, D = backPropagation(network, fx, outputs)
+        network.PrintNetwork()
+        delta_y, aux = backPropagation(network, fx, outputs, inst)
+        D.append(aux)
+    D = regularization(network,D,instances)
+    update_layers(0.1, network, D)
         
