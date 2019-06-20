@@ -18,7 +18,7 @@ def error_j(fx, expected, size_dataset):
     y = np.array(expected)
     j_vector = -y * np.log(fx) - (np.ones(len(y)) - y) * np.log(np.ones(len(y)) - fx)
     j = np.sum(j_vector)
-    j /= size_dataset
+    #j /= size_dataset
     return j
 
 def inputs_propagation(network, instance, inputs):
@@ -96,19 +96,35 @@ def update_layers(alpha, network , D):
      
       
 
-def execute(network, instances):
+def execute(network, instances, isTest):
     for instance in instances:
-        inputs_outputs = instance.split(";")        
-        
         inputs = []
-        for inpts in inputs_outputs[0].split(','):
-            print("inpts:", inpts)
-            inputs.append(float(inpts))
-
         outputs = []
-        for outpts in inputs_outputs[1].split(','):
+        
+        print("isTest=", isTest)
+                       
+        if(isTest):
+            inputs_outputs = instance.split(";")    
+            
+            for inpts in inputs_outputs[0].split(','):
+                print("inpts:", inpts)
+                inputs.append(float(inpts))
+
+        
+            for outpts in inputs_outputs[1].split(','):
+                print("outpts:", outpts)
+                outputs.append(float(outpts))
+        else:
+            inputs_outputs = instance.split(",")   
+            for i in range(len(inputs_outputs) - 1):
+                print("inpts:", inputs_outputs[i])
+                #inputs.append(float(inpts))
+
+        
+            outpts = inputs_outputs[-1]
             print("outpts:", outpts)
-            outputs.append(float(outpts))
+            #outputs.append(float(outpts))
+        
         
         fx = np.round(inputs_propagation(network, instance, inputs),5)
         
@@ -118,6 +134,6 @@ def execute(network, instances):
         error = error_j(fx, outputs, len(instances))
         print("erro J calculado=", error)
         
-        network.PrintNetwork()
-        delta_y, D = backPropagation(network, fx, outputs)
+#        network.PrintNetwork()
+#        delta_y, D = backPropagation(network, fx, outputs)
         

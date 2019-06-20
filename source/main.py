@@ -22,12 +22,12 @@ numFolds=10
 #    folds = k_folds.k_folding(table, numFolds, table.columns[table.columns.size-1])
 #    initialize_network()
   
-def initialize_network_for_validation(network_file_lines, initial_weights_file_lines, dataset_file_lines):
+def initialize_network_for_validation(network_file_lines, initial_weights_file_lines, dataset_file_lines, isTest):
     #print("[main] Inicializando rede")
     
     print("network_file_lines", network_file_lines)
     print("initial_weights_file_lines", initial_weights_file_lines)
-    print("dataset_file_lines", dataset_file_lines)
+    #print("dataset_file_lines", dataset_file_lines)
 
     #primeira linha é o fator de regularização
     network_lambda = float(network_file_lines[0])   
@@ -69,11 +69,7 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
           
     instances = []
     for instance in dataset_file_lines:
-        print("dataset_file_lines", dataset_file_lines)
-        
-        print("[main] instance:", instance)
         instances.append(instance)
-    
     
     print("[main] Fator de regularizacao:", network_lambda)
     print("[main] Quantidade de camadas:", len(layers))
@@ -82,7 +78,7 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
     neural_network = Neural_Network(network_lambda, layers_size, layers)
     
     #chama algoritmo de bajpropagation passando a rede e as instancias de treinamento
-    back_propagation.execute(neural_network, dataset_file_lines)
+    back_propagation.execute(neural_network, dataset_file_lines, isTest)
     
 
 attributes_command_line = sys.argv
@@ -98,14 +94,12 @@ if(len(attributes_command_line) > 1):
     
     f = open(initial_weights_file, "r")
     initial_weights_file_lines = f.readlines()
-
-    print("dataset_file_lines", initial_weights_file_lines)
         
     f = open(dataset_file, "r")
     dataset_file_lines = f.readlines()
     
-    initialize_network_for_validation(network_file_lines, initial_weights_file_lines, dataset_file_lines)
-else: # carrega estrutura da rede, pesos e data set do que tem quem DadosTreinamento.py
+    initialize_network_for_validation(network_file_lines, initial_weights_file_lines, dataset_file_lines, True)
+else:
     empty_initial_weights = []
     
     print("neural_network_structure=", neural_network_structure)
@@ -115,11 +109,8 @@ else: # carrega estrutura da rede, pesos e data set do que tem quem DadosTreinam
     dataset = table.values.tolist()
     fixed_dataset = []
     
-    print("dataset", dataset)
+    #print("dataset", dataset)
     for i in range(len(dataset)):
         fixed_dataset.append(str(dataset[i])[2:-2])
     
-    print("fixed_dataset", fixed_dataset)
-
-    
-    initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset)
+    initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False)

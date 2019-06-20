@@ -3,22 +3,21 @@ import pandas as pd
 
 
 isNumeric = True
-isTest = True
+
+#Windows
 #tablePath = "..\data\wine.data"
 #tablePath = "..\data\ionosphere.data"
 
-
-tablePath = "../data/dataset_1.txt"
-#tablePath = "..\data\dataset_2.data"
+# MAC
+#tablePath = "../data/dataset_1.txt"
+#tablePath = "../data/dataset_2.txt"
+tablePath = "../data/ionosphere.data"
 
 #vetor que contem a estrutura da rede (camadas e neuronios por camada)
 neural_network_structure = [0.000, 1, 2, 1 ]
 
 def DataRead(str1):
-    if(isTest==False):
-        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
-    else:
-        dataTable = pd.read_csv("%s" % str1,header=None, sep=";",  engine='python')
+    dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     return dataTable
 
 def normalizeTable(table, minNumber, maxNumber):
@@ -57,8 +56,12 @@ if (tablePath == "..\data\wine.data"):
     aux = aux - 2
     table["result"]=aux
     
-if (isTest == False):
-    normalizeTable(table,-1,1)
+if (tablePath == "../data/ionosphere.data"): #mac
+#if (tablePath == "..\data\ionosphere.data"): #windows
+    print("Adjusting ionosphere dataset")
+    table = table.replace('g',1)
+    table = table.replace('b',-1)
+    
 
 
     
