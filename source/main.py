@@ -111,6 +111,8 @@ else:
     
     #print("dataset", dataset)
     for i in range(len(dataset)):
-        fixed_dataset.append(str(dataset[i])[2:-2])
+        fixed_dataset.append(str(dataset[i])[2:-3])
+
+        
     
     initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False)

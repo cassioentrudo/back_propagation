@@ -15,10 +15,11 @@ def sigmoid(z):
 
 def error_j(fx, expected, size_dataset):
     print ("fx: ", fx, "expected: ", expected, "size_dataset: ", size_dataset)
-    y = np.array(expected)
-    j_vector = -y * np.log(fx) - (np.ones(len(y)) - y) * np.log(np.ones(len(y)) - fx)
+    y = np.array(expected, dtype=np.float64)
+    print("YYY", y)
+    j_vector = -y * np.log(fx) - (np.ones(y.size) - y) * np.log(np.ones(y.size) - fx)
     j = np.sum(j_vector)
-    j /= size_dataset
+    #j /= size_dataset
     return j
 
 def inputs_propagation(network, instance, inputs):
@@ -56,15 +57,14 @@ def inputs_propagation(network, instance, inputs):
     return new_inputs
  
 def backPropagation(network, fx, y, inst):
-    
+    print("len(network.layers)-1:=", len(network.layers)-1)
     delta_y = []
     container = []
     delta_k = []
     D  = []
     aux = []
-    for i in range(len(network.layers)-1):
-        
-        container.extend(np.around(fx[i] - y[i],5))
+    for i in range(len(network.layers)-1):        
+        container.extend(np.around(fx[i] - y,5))
     delta_y.append(container)
     
     for k in range(len(network.layers_size)-1, 1, -1):
@@ -162,13 +162,14 @@ def execute(network, instances, isTest):
         else:
             inputs_outputs = instance.split(",")   
             for i in range(len(inputs_outputs) - 1):
-                print("inpts:", inputs_outputs[i])
-                #inputs.append(float(inpts))
+                print(i, "inpts:", inputs_outputs[i])
+                inputs.append(float(inputs_outputs[i]))
 
         
-            outpts = inputs_outputs[-1]
-            print("outpts:", outpts)
+            outputs = float(inputs_outputs[-1])
+            print("outpts:", outputs)
         
+        print("Chamando Inputs_Propagation")
         fx = np.round(inputs_propagation(network, instance, inputs),5)
         
         print("saida predita=", fx)

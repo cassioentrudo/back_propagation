@@ -14,7 +14,6 @@ isNumeric = True
 tablePath = "../data/ionosphere.data"
 
 #vetor que contem a estrutura da rede (camadas e neuronios por camada)
-neural_network_structure = [0.000, 1, 2, 1 ]
 
 def DataRead(str1):
     dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
@@ -56,12 +55,11 @@ if (tablePath == "..\data\wine.data"):
     aux = aux - 2
     table["result"]=aux
     
-if (tablePath == "../data/ionosphere.data"): #mac
-#if (tablePath == "..\data\ionosphere.data"): #windows
+if (tablePath == "../data/ionosphere.data" or tablePath == "..\data\ionosphere.data"):
     print("Adjusting ionosphere dataset")
     table = table.replace('g',1)
     table = table.replace('b',-1)
     
 
-
+neural_network_structure = [0.250, table.columns.size -1, 2, 1 ]
     
