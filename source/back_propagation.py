@@ -7,6 +7,7 @@ Created on Sun Jun 16 10:20:30 2019
 """
 
 import numpy as np
+import copy
 import re    
 
 def sigmoid(z):
@@ -102,7 +103,6 @@ def regularization(network, D, instances):
         layersReg=network.lmbda*layersReg
         P.append(layersReg)
     
-    
     norm = []
     for k in range(len(P)):
         norm.extend([0])
@@ -124,7 +124,6 @@ def regularization(network, D, instances):
     return norm
 
     
-    
 def update_layers(alpha, network , D):
     for k in range(len(network.layers_size)-1, 0, -1):
         network.layers[k-1] = network.layers[k-1] - alpha*D[k-1][0]
@@ -138,6 +137,27 @@ def calculateS(network):
                 aux = layer[i,k]
                 S += aux ** 2
     return S
+
+def gradient_verification(network, intances, inputs, E):
+    networkClean = copy.deepcopy(network)
+    networkPlus = copy.deepcopy(network)
+    networkMinus = copy.deepcopy(network)
+
+    for j in range(len(networkClean.layers)):
+
+        gradError = 0
+
+        for i in range(len(networkClean.layers[j])):
+           networkPlus.layers[j].neuron[i] += E
+           errorPlus = execute(networkPlus, intances, inputs)
+           networkMinus.layers[j].neuron[i] -= E
+           errorMinus = execute(networkMinus, intances, inputs)
+           gradError += (errorPlus - errorMinus) / (2 * E) 
+
+        print("Theta: ", j," erro", gradError)
+
+    return
+
 
 def execute(network, instances, isTest):
     D=[]
