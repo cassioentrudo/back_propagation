@@ -126,11 +126,19 @@ def update_layers(alpha, network , D):
         network.layers[k-1] = network.layers[k-1] - alpha*D[k-1][0]
      
      
-      
+def calculateS(network):
+    S=0
+    for layer in network.layers:
+        for neuron in layer:
+            for k in range(len(neuron)):
+                aux = neuron[k]
+                S += aux ** 2
+    return S
 
 def execute(network, instances, isTest):
     D=[]
     inst = -1
+    error=0
     
     for instance in instances:
         inputs = []
@@ -166,12 +174,17 @@ def execute(network, instances, isTest):
         print("saida predita=", fx)
         print("saida esperada=", outputs)
         
-        error = error_j(fx, outputs, len(instances))
-        print("erro J calculado=", error)
+        error += error_j(fx, outputs, len(instances))
         
         network.PrintNetwork()
         delta_y, aux = backPropagation(network, fx, outputs, inst)
         D.append(aux)
     D = regularization(network,D,instances)
+    
+    J = error/len(instances)
+    S = calculateS(network)
+    S *= network.lmbda/(len(instances)*2)
+    errorReg = J+S
+    print("Erro regularizado: ", errorReg)
+    
     update_layers(0.1, network, D)
-        
