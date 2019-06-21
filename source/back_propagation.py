@@ -216,7 +216,7 @@ def execute(network, instances, isTest):
     
     #criação de arquivo de verificação numérica de gradiente
     if(isTest):
-        f= open("verificacao_numerica_gradiente.txt","w+")
+        f= open("gradient_numeric_verification.txt","w+")
         
         for l in range(len(D)):
             v = np.around(D[l][0], 5)
