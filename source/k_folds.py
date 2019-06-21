@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*- 
-from DadosTreinamento import table
 import pandas as pd
 
 
@@ -13,7 +12,6 @@ def k_folding(kTable, kN, kTarget):
     count=0
     if (totalSize%kN>0):
         foldSize = foldSize + 1
-    #shufTable = table.sample(frac=1).reset_index(drop=True)
     orderedTable = kTable.sort_values(kTarget)
     stratified = pd.DataFrame();
     for x in range(kN):

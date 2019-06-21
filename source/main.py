@@ -1,10 +1,5 @@
 #!/usr/bin/env python2
 # encoding: utf-8
-"""
-Created on Tue Jun 11 20:41:09 2019c
-
-@author: cassio
-"""
 import sys
 import random
 import numpy as np
@@ -12,12 +7,10 @@ import k_folds
 import back_propagation
 import pandas as pd
 
-from DadosTreinamento import table
+from data_training import table
 from neural_network import Neural_Network
 
-
 numFolds=10
-
 
 def categoricVotation(network, testFold, targetFeature, fixedDataset):
     answers = []
