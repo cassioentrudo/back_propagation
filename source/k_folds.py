@@ -30,12 +30,12 @@ def k_folding(kTable, kN, kTarget):
             folds.append(stratified[x:x+foldSize])
             x = x + foldSize
         else:
-            folds.append(stratified[x:x+foldSize-1])
-            x = x + foldSize - 1
+            folds.append(stratified[x:x+foldSize])
+            x = x + foldSize
     return folds
 
 #%%
 
-n=4
-target= table.columns[table.columns.size-1]
-fold = k_folding(table, n, target)
+#n=4
+#target= table.columns[table.columns.size-1]
+#fold = k_folding(table, n, target)

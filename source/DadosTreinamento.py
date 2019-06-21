@@ -6,12 +6,12 @@ isNumeric = True
 
 #Windows
 #tablePath = "..\data\wine.data"
-#tablePath = "..\data\ionosphere.data"
+tablePath = "..\data\ionosphere.data"
 
 # MAC
 #tablePath = "../data/dataset_1.txt"
 #tablePath = "../data/dataset_2.txt"
-tablePath = "../data/ionosphere.data"
+#tablePath = "../data/ionosphere.data"
 
 #vetor que contem a estrutura da rede (camadas e neuronios por camada)
 
@@ -58,8 +58,8 @@ if (tablePath == "..\data\wine.data"):
 if (tablePath == "../data/ionosphere.data" or tablePath == "..\data\ionosphere.data"):
     print("Adjusting ionosphere dataset")
     table = table.replace('g',1)
-    table = table.replace('b',-1)
+    table = table.replace('b',0)
     
 
-neural_network_structure = [0.250, table.columns.size -1, 2, 1 ]
+
     

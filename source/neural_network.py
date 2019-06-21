@@ -24,9 +24,10 @@ class Neural_Network:
         self.z = []
         
     def PrintNetwork(self):
-        print("*******NODO*******")
-        print("lmbda =", self.lmbda)
-        print("layers_size =", self.layers_size)
-        print("a =", self.a)
-        print("z =", self.z)
-        print("********************")
+        #print("*******NODO*******")
+        #print("lmbda =", self.lmbda)
+        #print("layers_size =", self.layers_size)
+        #print("a =", self.a)
+        #print("z =", self.z)
+        #print("********************")
+        return 0
