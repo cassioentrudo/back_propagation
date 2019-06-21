@@ -7,7 +7,7 @@ Created on Sun Jun 16 10:20:30 2019
 """
 
 import numpy as np
-    
+import re    
 
 def sigmoid(z):
     sigmoide = 1.0 / (1.0 + np.exp(-z))
@@ -188,3 +188,16 @@ def execute(network, instances, isTest):
     print("Erro regularizado: ", errorReg)
     
     update_layers(0.1, network, D)
+    
+    
+    #criação de arquivo de verificação numérica de gradiente
+    if(isTest):
+        f= open("verificacao_numerica_gradiente.txt","w+")
+        
+        for l in range(len(D)):
+            v = np.around(D[l][0], 5)
+            v = re.sub('[\[\]]','',repr(v)[6:-2])
+            v = v.replace(",\n", ";")
+            v = v.replace(" ", "")
+            v +='\n'
+            f.write(v)
