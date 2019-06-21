@@ -190,9 +190,9 @@ def execute(network, instances, isTest):
     S = calculateS(network)
     S *= network.lmbda/(len(instances)*2)
     errorReg = J+S
-    #print("Erro regularizado: ", errorReg)
+    print("Erro regularizado: ", errorReg)
     
-    update_layers(0.1, network, D)
+    update_layers(0.2, network, D)
     
     #criação de arquivo de verificação numérica de gradiente
     if(isTest):

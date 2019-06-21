@@ -61,5 +61,5 @@ if (tablePath == "../data/ionosphere.data" or tablePath == "..\data\ionosphere.d
     table = table.replace('b',0)
     
 
-
+table = normalizeTable(table, 0, 1)
     

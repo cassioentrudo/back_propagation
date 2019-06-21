@@ -39,7 +39,9 @@ def categoricVotation(network, testFold, targetFeature, fixedDataset):
                 minDif=abs(fx-possibleAnswers[j])
                 minAnswer=possibleAnswers[j]
         answers.extend([minAnswer])
-    return answers
+    print("Resultado: ", answers)
+    print("Corretos: ", correct)
+    return answers,correct
 
 def initialize_network_for_validation(network_file_lines, initial_weights_file_lines, dataset_file_lines, isTest, network = None):
     #print("[main] Inicializando rede")
@@ -148,12 +150,19 @@ def main():
             neural_network_structure = [0.250, table.columns.size -1, 5, 1 ]
             print("Executing with fold number: ", i, " and neural_network_structure=", neural_network_structure)
             errorReg,network,fx = initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False)
-            while (errorReg>0.1):
+            while (errorReg>0.0024):
                 network.a=[]
                 network.z=[]
                 errorReg,network,fx = initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False, network)
-                print("Fx: ", fx)
-            answers = categoricVotation(network,testFold,table.columns.size -1, fixed_dataset)
-            print("Resultado: ", answers)
+                #print("Fx: ", fx)
+            answers,correct = categoricVotation(network,testFold,table.columns.size -1, fixed_dataset)
+            right = 0
+            wrong = 0
+            for j in range(len(answers)):
+                if(answers[j]==correct[j]):
+                    right += 1
+                else:
+                    wrong += 1
+            print("Acertos: ", right, "Erros: ", wrong )
 
 main()
