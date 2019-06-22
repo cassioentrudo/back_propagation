@@ -17,7 +17,7 @@ from neural_network import Neural_Network
 
 
 numFolds=10
-alpha=0.25
+alpha=0.01
 
 
 def categoricVotation(network, testFold, targetFeature, testDataset):
@@ -153,7 +153,7 @@ def main():
             for k in range(len(testFold)):
                 test_dataset.append(str(testset[k])[1:-1])
                 
-            neural_network_structure = [0.250, table.columns.size -1, 10, 10, 1 ]
+            neural_network_structure = [0.250, table.columns.size -1, 40, 40, 1 ]
             print("Executing with fold number: ", i, " and neural_network_structure=", neural_network_structure)
             errorReg,network,fx = initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False)
             difError=errorReg

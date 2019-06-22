@@ -25,6 +25,7 @@ def error_j(fx, expected, size_dataset):
 def inputs_propagation(network, instance, inputs):
     auxa = []
     auxz = []
+    network1 = network.layers
     #criando vetor a
     a = np.zeros((int(network.layers_size[0])+1, 1)).ravel()
     a[0] = 1 #bias
@@ -41,13 +42,14 @@ def inputs_propagation(network, instance, inputs):
         #print("quantidade de neuronios=", network.layers_size[i]) 
         #print("vetor_a=", a)
         #vetor com pesos
-        layer = network.layers[i]
-        print("layer=", layer)
-        print("a=", a)
+        #layer = np.ndarray([len(inputs), len(network.layers_size)])
+        layer = network.layers[i] #.astype
+       # print("layer=", layer)
+       # print("a=", a)
         #print("layer_T=", np.transpose(layer))
         z = np.dot(layer, a)
         #z = layer*a
-        #print("vetor_z=", z)
+      #  print("vetor_z=", z)
         auxz.append(z)
 
         a = sigmoid(z)
@@ -68,7 +70,7 @@ def inputs_propagation(network, instance, inputs):
         inputs = a
     network.a.append(auxa)
     network.z.append(auxz)
-  
+    #print("fim")
     return inputs
  
 def backPropagation(network, fx, y, inst):
@@ -141,7 +143,8 @@ def regularization(network, D, instances):
             norm[len(P)-1-k] = D[inst][k] + norm[len(P)-1-k]
             
     for k in range(len(P)):
-        aux = ([(1.0 / len(instances)) * (norm[len(P)-1-k] + P[k])])
+        #aux = ([(1.0 / len(instances)) * (norm[len(P)-1-k] + P[k])])
+        aux = np.ravel([(1.0 / len(instances)) * (norm[len(P)-1-k] + P[k])])
         norm[len(P)-1-k] =  aux
             
             #if (norm[len(P)-1-k]==0):
