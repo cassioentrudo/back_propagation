@@ -6,17 +6,21 @@ isNumeric = True
 
 #Windows
 #tablePath = "..\data\wine.data"
-tablePath = "..\data\ionosphere.data"
+#tablePath = "..\data\ionosphere.data"
+#tablePath = "..\data\pima.tsv"
 
 # MAC
-#tablePath = "../data/dataset_1.txt"
+tablePath = "../data/dataset_1.txt"
 #tablePath = "../data/dataset_2.txt"
 #tablePath = "../data/ionosphere.data"
 
 #vetor que contem a estrutura da rede (camadas e neuronios por camada)
 
 def DataRead(str1):
-    dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
+    if(tablePath == "..\data\pima.tsv"):
+        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\\t",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
+    else:
+        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     return dataTable
 
 def normalizeTable(table, minNumber, maxNumber):
@@ -60,6 +64,9 @@ if (tablePath == "../data/ionosphere.data" or tablePath == "..\data\ionosphere.d
     table = table.replace('g',1)
     table = table.replace('b',0)
     
+if(tablePath == "..\data\pima.tsv"):
+    table = table.drop(index=0)
+    table = table.astype(float)
 
 table = normalizeTable(table, 0, 1)
     

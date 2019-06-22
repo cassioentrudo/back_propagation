@@ -1,5 +1,10 @@
 #!/usr/bin/env python2
 # encoding: utf-8
+"""
+Created on Tue Jun 11 20:41:09 2019c
+
+@author: cassio
+"""
 import sys
 import random
 import numpy as np
@@ -10,9 +15,12 @@ import pandas as pd
 from data_training import table
 from neural_network import Neural_Network
 
-numFolds=10
 
-def categoricVotation(network, testFold, targetFeature, fixedDataset):
+numFolds=10
+alpha=0.25
+
+
+def categoricVotation(network, testFold, targetFeature, testDataset):
     answers = []
     correct = []
     possibleAnswers = []
@@ -24,7 +32,7 @@ def categoricVotation(network, testFold, targetFeature, fixedDataset):
    # print("[VOTATION] len(testFold)=", len(testFold))
     for i in range(len(testFold)):
         #print("[VOTATION] tree=", tree)
-        errorReg, network, fx = initialize_network_for_validation([0], [0], fixedDataset, False, network)
+        errorReg, network, fx = initialize_network_for_validation([0], [0], [testDataset[i]], False, network)
         minDif=100
         minAnswer=100
         for j in range(len(possibleAnswers)):
@@ -92,10 +100,10 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
         neural_network = Neural_Network(network_lambda, layers_size, layers)
     
         #chama algoritmo de bajpropagation passando a rede e as instancias de treinamento
-        errorReg, network, fx = back_propagation.execute(neural_network, dataset_file_lines, isTest)
+        errorReg, network, fx = back_propagation.execute(neural_network, dataset_file_lines, isTest, alpha)
         
     else:
-        errorReg, network, fx = back_propagation.execute(network, dataset_file_lines, isTest)
+        errorReg, network, fx = back_propagation.execute(network, dataset_file_lines, isTest, alpha)
     
     return errorReg, network, fx
     
@@ -134,21 +142,30 @@ def main():
                 if (j!=i):
                     datasets = datasets.append(folds[j])
             dataset = datasets.values.tolist()
+            testset = testFold.values.tolist()
             fixed_dataset = []
+            test_dataset = []
     
             #print("dataset", dataset)
             for k in range(len(dataset)):
-                fixed_dataset.append(str(dataset[k])[2:-3])
+                fixed_dataset.append(str(dataset[k])[1:-1])
+            
+            for k in range(len(testFold)):
+                test_dataset.append(str(testset[k])[1:-1])
                 
-            neural_network_structure = [0.250, table.columns.size -1, 5, 1 ]
+            neural_network_structure = [0.250, table.columns.size -1, 10, 10, 1 ]
             print("Executing with fold number: ", i, " and neural_network_structure=", neural_network_structure)
             errorReg,network,fx = initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False)
-            while (errorReg>0.0024):
+            difError=errorReg
+            while (abs(difError)>0.0001):
+                difError=errorReg
                 network.a=[]
                 network.z=[]
                 errorReg,network,fx = initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False, network)
+                difError-=errorReg
                 #print("Fx: ", fx)
-            answers,correct = categoricVotation(network,testFold,table.columns.size -1, fixed_dataset)
+                print("difError: ", difError)
+            answers,correct = categoricVotation(network,testFold,table.columns.size -1, test_dataset)
             right = 0
             wrong = 0
             for j in range(len(answers)):

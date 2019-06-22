@@ -7,7 +7,6 @@ Created on Sun Jun 16 10:20:30 2019
 """
 
 import numpy as np
-import copy
 import re    
 
 def sigmoid(z):
@@ -20,42 +19,44 @@ def error_j(fx, expected, size_dataset):
     #print("YYY", y)
     j_vector = -y * np.log(fx) - (np.ones(y.size) - y) * np.log(np.ones(y.size) - fx)
     j = np.sum(j_vector)
-    j /= size_dataset
+    #j /= size_dataset
     return j
 
 def inputs_propagation(network, instance, inputs):
     auxa = []
     auxz = []
+    #criando vetor a
+    a = np.zeros((int(network.layers_size[0])+1, 1), dtype=np.float64)
+    a[0] = 1 #bias
+        
+    for j in range(len(inputs)):
+        #print("input=", np.round(inputs[j], 5))
+        a[j + 1] = np.round(inputs[j],5)
+    auxa.append(a)
     for i in range(len(network.layers_size)-1):
         #print("\n\n########################################################################")
         #print("layer:", i+1)            
         #print("quantidade de neuronios=", network.layers_size[i]) 
-                        
-        #criando vetor a
-        a = np.zeros((int(network.layers_size[i])+1, 1), dtype=np.float64)
-        a[0] = 1 #bias
-        
-        for j in range(len(inputs)):
-            #print("input=", np.round(inputs[j], 5))
-            a[j + 1] = np.round(inputs[j],5)
-        auxa.append(a)
         #print("vetor_a=", a)
-            
         #vetor com pesos
         layer = network.layers[i]
         #print("layer=", layer)
         #print("layer_T=", np.transpose(layer))
         z = np.dot(layer, a)
+        #z = layer*a
         #print("vetor_z=", z)
         auxz.append(z)
 
-        new_inputs = sigmoid(z)
+        a = sigmoid(z)
+        if(i!=len(network.layers_size)-2):
+            a = np.insert(a,0,1)
+        
+        auxa.append(a)
         #print("out", new_inputs)
-        inputs = new_inputs
-    auxa.append(inputs)
+        inputs = a
     network.a.append(auxa)
     network.z.append(auxz)
-    return new_inputs
+    return inputs
  
 def backPropagation(network, fx, y, inst):
     #print("len(network.layers)-1:=", len(network.layers)-1)
@@ -64,11 +65,11 @@ def backPropagation(network, fx, y, inst):
     delta_k = []
     D  = []
     aux = []
-    for i in range(len(network.layers)-1): 
+    for i in range(len(fx)): 
         if (isinstance(y,list)):
-            container.extend(np.around(fx[i] - y[i],5))
+            container.extend([np.around(fx[i] - y[i],5)])
         else:
-            container.extend(np.around(fx[i] - y,5))
+            container.extend([np.around(fx[i] - y,5)])
     delta_y.append(container)
     
     #delta_y = np.reshape(delta_y,len(delta_y[-1]),1)
@@ -77,7 +78,7 @@ def backPropagation(network, fx, y, inst):
         aux = np.multiply( np.dot(np.transpose(network.layers[k-1]), delta_y[-1]), network.a[inst][k-1]) 
         aux = np.multiply( aux, (1 - network.a[inst][k-1]))
         for j in range(1,len(aux)):
-            delta_k.extend(np.around([aux[j,j]],5))
+            delta_k.extend(np.around([aux[j]],5))
         aux = []  #limpa
         delta_y.append(delta_k)
         delta_k = []        #limpa
@@ -86,7 +87,7 @@ def backPropagation(network, fx, y, inst):
         #np.insert(D,j, D[j] + (delta_y[(len(network.layers_size)-1)-j]*np.transpose(network.a[j])))
         transposta = np.transpose(network.a[inst][j-1])
         delta = np.array(delta_y[len(network.layers_size)-1-j])
-        delta = np.reshape(delta,(len(delta),1))
+        #delta = np.reshape(delta,(len(delta),1))
         #print("D= ", delta_y[(len(network.layers_size)-1)-j], "\n transposta da a: ", transposta)
         D.append(np.dot(delta, transposta))
         
@@ -102,6 +103,7 @@ def regularization(network, D, instances):
         layersReg[:, 0] = np.zeros(len(layersReg[0]))
         layersReg=network.lmbda*layersReg
         P.append(layersReg)
+    
     
     norm = []
     for k in range(len(P)):
@@ -124,6 +126,7 @@ def regularization(network, D, instances):
     return norm
 
     
+    
 def update_layers(alpha, network , D):
     for k in range(len(network.layers_size)-1, 0, -1):
         network.layers[k-1] = network.layers[k-1] - alpha*D[k-1][0]
@@ -138,28 +141,7 @@ def calculateS(network):
                 S += aux ** 2
     return S
 
-def gradient_verification(network, intances, inputs, E):
-    networkClean = copy.deepcopy(network)
-    networkPlus = copy.deepcopy(network)
-    networkMinus = copy.deepcopy(network)
-
-    for j in range(len(networkClean.layers)):
-
-        gradError = 0
-
-        for i in range(len(networkClean.layers[j])):
-           networkPlus.layers[j].neuron[i] += E
-           errorPlus = execute(networkPlus, intances, inputs)
-           networkMinus.layers[j].neuron[i] -= E
-           errorMinus = execute(networkMinus, intances, inputs)
-           gradError += (errorPlus - errorMinus) / (2 * E) 
-
-        print("Theta: ", j," erro", gradError)
-
-    return
-
-
-def execute(network, instances, isTest):
+def execute(network, instances, isTest, alpha):
     D=[]
     inst = -1
     error=0
@@ -210,13 +192,14 @@ def execute(network, instances, isTest):
     S = calculateS(network)
     S *= network.lmbda/(len(instances)*2)
     errorReg = J+S
-    print("Erro regularizado: ", errorReg)
+    #print("Erro regularizado: ", errorReg)
     
-    update_layers(0.2, network, D)
+    if(len(instances)>1):
+        update_layers(alpha, network, D)
     
     #criação de arquivo de verificação numérica de gradiente
     if(isTest):
-        f= open("gradient_numeric_verification.txt","w+")
+        f= open("verificacao_numerica_gradiente.txt","w+")
         
         for l in range(len(D)):
             v = np.around(D[l][0], 5)
