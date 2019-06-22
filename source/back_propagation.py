@@ -32,7 +32,7 @@ def inputs_propagation(network, instance, inputs):
     for j in range(len(inputs)):
         #print("input=", np.round(inputs[j], 5))
         a[j + 1] = np.round(inputs[j],5)
-    auxa.append(a)
+    auxa.append(a.T)
     for i in range(len(network.layers_size)-1):
         #print("\n\n########################################################################")
         #print("layer:", i+1)            
@@ -49,8 +49,9 @@ def inputs_propagation(network, instance, inputs):
 
         a = sigmoid(z)
         if(i!=len(network.layers_size)-2):
-            a = np.insert(a,0,1)
+            a[0] = np.insert(a[0],0,1)
         
+        a = a.ravel()
         auxa.append(a)
         #print("out", new_inputs)
         inputs = a
@@ -70,15 +71,22 @@ def backPropagation(network, fx, y, inst):
             container.extend([np.around(fx[i] - y[i],5)])
         else:
             container.extend([np.around(fx[i] - y,5)])
+    print("container: ", container)
     delta_y.append(container)
     
     #delta_y = np.reshape(delta_y,len(delta_y[-1]),1)
     for k in range(len(network.layers_size)-1, 1, -1):
-        
-        aux = np.multiply( np.dot(np.transpose(network.layers[k-1]), delta_y[-1]), network.a[inst][k-1]) 
+        delt = delta_y[-1]
+        print("delt: ", delt)
+        transposta = np.transpose(network.layers[k-1])
+        print("transposta: ", transposta)
+        aux = np.dot(transposta, delt)
+        aux = np.multiply( aux, network.a[inst][k-1]) 
         aux = np.multiply( aux, (1 - network.a[inst][k-1]))
+        print("aux: ", aux)
         for j in range(1,len(aux)):
-            delta_k.extend(np.around([aux[j]],5))
+            auxj=aux[j]
+            delta_k.extend([np.around(auxj,5)])
         aux = []  #limpa
         delta_y.append(delta_k)
         delta_k = []        #limpa
@@ -87,7 +95,14 @@ def backPropagation(network, fx, y, inst):
         #np.insert(D,j, D[j] + (delta_y[(len(network.layers_size)-1)-j]*np.transpose(network.a[j])))
         transposta = np.transpose(network.a[inst][j-1])
         delta = np.array(delta_y[len(network.layers_size)-1-j])
-        #delta = np.reshape(delta,(len(delta),1))
+        delta = np.reshape(delta,(len(delta),1))
+        if(transposta.ndim>1):
+            if(transposta.shape[1]>transposta.shape[0]):
+                transposta = np.reshape(transposta,(1,transposta.shape[1]))
+            else:
+                transposta = np.reshape(transposta,(1,transposta.shape[0]))
+        else:
+            transposta = np.reshape(transposta,(1,len(transposta)))
         #print("D= ", delta_y[(len(network.layers_size)-1)-j], "\n transposta da a: ", transposta)
         D.append(np.dot(delta, transposta))
         
