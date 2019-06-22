@@ -26,13 +26,15 @@ def inputs_propagation(network, instance, inputs):
     auxa = []
     auxz = []
     #criando vetor a
-    a = np.zeros((int(network.layers_size[0])+1, 1), dtype=np.float64)
+    a = np.zeros((int(network.layers_size[0])+1, 1)).ravel()
     a[0] = 1 #bias
+    #a = np.transpose()
+    #a = a.reshape((a.shape[0], 1))
         
     for j in range(len(inputs)):
         #print("input=", np.round(inputs[j], 5))
         a[j + 1] = np.round(inputs[j],5)
-    auxa.append(a.T)
+    auxa.append(a)
     for i in range(len(network.layers_size)-1):
         #print("\n\n########################################################################")
         #print("layer:", i+1)            
@@ -40,7 +42,8 @@ def inputs_propagation(network, instance, inputs):
         #print("vetor_a=", a)
         #vetor com pesos
         layer = network.layers[i]
-        #print("layer=", layer)
+        print("layer=", layer)
+        print("a=", a)
         #print("layer_T=", np.transpose(layer))
         z = np.dot(layer, a)
         #z = layer*a
@@ -48,15 +51,24 @@ def inputs_propagation(network, instance, inputs):
         auxz.append(z)
 
         a = sigmoid(z)
-        if(i!=len(network.layers_size)-2):
-            a[0] = np.insert(a[0],0,1)
         
-        a = a.ravel()
+        if(i!=len(network.layers_size)-2):
+            a = np.insert(a, 0, 1)
+            #a = np.matrix(a)
+            #a = np.transpose(a)
+            #a = np.matrix(a)
+            #a[0] = np.insert(a[0],0,1).T
+        
+        
+        #a = a.flatten()
+        #a = a.T
+       # a = a.ravel()
         auxa.append(a)
         #print("out", new_inputs)
         inputs = a
     network.a.append(auxa)
     network.z.append(auxz)
+  
     return inputs
  
 def backPropagation(network, fx, y, inst):
@@ -71,19 +83,19 @@ def backPropagation(network, fx, y, inst):
             container.extend([np.around(fx[i] - y[i],5)])
         else:
             container.extend([np.around(fx[i] - y,5)])
-    print("container: ", container)
+    #print("container: ", container)
     delta_y.append(container)
     
     #delta_y = np.reshape(delta_y,len(delta_y[-1]),1)
     for k in range(len(network.layers_size)-1, 1, -1):
         delt = delta_y[-1]
-        print("delt: ", delt)
+       # print("delt: ", delt)
         transposta = np.transpose(network.layers[k-1])
-        print("transposta: ", transposta)
+       # print("transposta: ", transposta)
         aux = np.dot(transposta, delt)
         aux = np.multiply( aux, network.a[inst][k-1]) 
         aux = np.multiply( aux, (1 - network.a[inst][k-1]))
-        print("aux: ", aux)
+       # print("aux: ", aux)
         for j in range(1,len(aux)):
             auxj=aux[j]
             delta_k.extend([np.around(auxj,5)])
