@@ -113,7 +113,43 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
         errorReg, network, fx = back_propagation.execute(network, dataset_file_lines, isTest, alpha)
     
     return errorReg, network, fx
-  
+
+
+def save_results(neural_network_structure, total_rights, total_wrongs):
+    full_string = "Quantidade de Folds: "
+    full_string += str(numFolds)
+    full_string += '\n\n'
+    full_string += "Alpha: "
+    full_string += str(alpha)
+    full_string += '\n\n'
+    full_string += "Fator de Regularização : "
+    full_string += str(neural_network_structure[0])
+    full_string += '\n\n'
+    full_string += "Quantidade de entradas : "
+    full_string += str(neural_network_structure[1])
+    full_string += '\n\n'
+    full_string += "Quantidade de saídas: "
+    full_string += str(neural_network_structure[-1])
+    full_string += '\n\n'
+    full_string += "Quantidade de camadas ocultas: "
+    full_string += str(len(neural_network_structure) - 3)
+    full_string += '\n\n'
+    
+    
+    for i in range(2, len(neural_network_structure)-1, 1):
+        full_string += "Camada oculta. Neurônios : "
+        full_string += str(neural_network_structure[i])
+        full_string += '\n'
+    
+    full_string += '\n'
+    full_string += "Acertos: "
+    full_string += str(total_rights)
+    full_string += '\n\n'
+    full_string += "Erros: "
+    full_string += str(total_wrongs)
+    
+    f= open("Results.txt","w+")
+    f.write(full_string)
 
 
 def main():
@@ -140,7 +176,10 @@ def main():
         empty_initial_weights = []
     
         #print("empty_initial_weights=", empty_initial_weights)
-    
+        
+        total_rights = 0
+        total_wrongs = 0
+        
         for i in range(len(folds)):
             testFold=folds[i]
             numVector = list(range(len(testFold)))
@@ -182,7 +221,10 @@ def main():
                 else:
                     wrong += 1
             print("Acertos: ", right, "Erros: ", wrong )
+            total_rights += right
+            total_wrongs += wrong
             
+        save_results(neural_network_structure, total_rights, total_wrongs)
             
             
 
