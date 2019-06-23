@@ -224,7 +224,7 @@ def execute(network, instances, isTest, alpha):
     errorReg = J+S
     #print("Erro regularizado: ", errorReg)
     
-    if(len(instances)>1):
+    if(len(instances)>=1):
         update_layers(alpha, network, D)
     
     #criação de arquivo de verificação numérica de gradiente

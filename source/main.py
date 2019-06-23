@@ -17,7 +17,7 @@ from neural_network import Neural_Network
 
 
 numFolds=10
-alpha=0.01
+alpha=0.2
 
 
 def categoricVotation(network, testFold, targetFeature, testDataset):
