@@ -144,7 +144,7 @@ def save_results(neural_network_structure, total_rights, total_wrongs):
     full_string += '\n'
     full_string += "Acertos: "
     full_string += str(total_rights)
-    full_string += '\n\n'
+    full_string += '\n'
     full_string += "Erros: "
     full_string += str(total_wrongs)
     
