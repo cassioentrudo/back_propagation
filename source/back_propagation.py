@@ -280,16 +280,22 @@ def execute(network, instances, isTest, alpha):
     
     #criação de arquivo de verificação numérica de gradiente
     if(isTest):
+        print("Verificação numérica de gradiente:")
+#        print("D", D)
         f= open("verificacao_numerica_gradiente.txt","w+")
+#        print("len(D)", len(D))
         
+        full_string = ""
         for l in range(len(D)):
-            v = np.around(D[l][0], 5)
-            v = re.sub('[\[\]]','',repr(v)[6:-2])
-            v = v.replace(",\n", ";")
-            v = v.replace(" ", "")
-            v +='\n'
-            f.write(v)
+            for c in range(len(D[l])):
+                g = round(D[l][c], 5)
+                full_string += str(g)
+                full_string += '\t'
+#                print("g")
+            full_string += '\n'
             
+        print(full_string)  
+        f.write(full_string)
             
         
             
