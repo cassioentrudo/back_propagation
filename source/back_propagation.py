@@ -5,7 +5,7 @@ Created on Sun Jun 16 10:20:30 2019
 
 @author: cassio
 """
-
+import copy
 import numpy as np
 import re    
 
@@ -171,6 +171,57 @@ def calculateS(network):
                 S += aux ** 2
     return S
 
+
+
+def gradient_verification(network, instances, isTest, alpha, networkPlus, networkMinus,  E):
+ 
+    inputs = []
+
+
+   # errorClean = execute(networkClean, intances, inputs)
+
+
+    for j in range(len(networkPlus.layers)-1):
+
+        gradError = 0
+
+
+        for i in range(len(networkPlus.layers[j])-1):
+
+            for k in range(len(networkPlus.layers[j][i])-1):
+                
+                
+                networkPlus.layers[j][i][k] += E
+                errorPlus, networkPlus, fxPlus = execute(networkPlus, instances, isTest, alpha)
+               
+                J = errorPlus/len(instances)
+                S = calculateS(networkPlus)
+                S *= networkPlus.lmbda/(len(instances)*2)
+                errorPlus = J+S
+                
+                
+                
+                networkMinus.layers[j][i][k] -= E
+
+                errorMinus, networkMinus, fxMinus  = execute(networkMinus, instances, isTest, alpha)
+                J = errorMinus/len(instances)
+                S = calculateS(networkMinus)
+                S *= networkMinus.lmbda/(len(instances)*2)
+                errorMinus = J+S
+                
+                
+                gradError += (errorPlus - errorMinus) / (2 * E) 
+
+
+
+        print("Theta: ", j," erro", gradError)
+
+    return gradError
+
+
+
+
+
 def execute(network, instances, isTest, alpha):
     D=[]
     inst = -1
@@ -238,5 +289,8 @@ def execute(network, instances, isTest, alpha):
             v = v.replace(" ", "")
             v +='\n'
             f.write(v)
+            
+            
+        
             
     return errorReg, network, fx
