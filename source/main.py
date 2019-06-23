@@ -101,7 +101,7 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
         
         networkPlus = Neural_Network(network_lambda, layers_size, layers)
         networkMinus = Neural_Network(network_lambda, layers_size, layers)
-        err = back_propagation.gradient_verification(network, dataset_file_lines, False, alpha,networkPlus, networkMinus,  0.000001)
+       # err = back_propagation.gradient_verification(network, dataset_file_lines, False, alpha,networkPlus, networkMinus,  0.000001)
         
         
         
