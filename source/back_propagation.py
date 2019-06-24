@@ -7,7 +7,9 @@ Created on Sun Jun 16 10:20:30 2019
 """
 import copy
 import numpy as np
-import re    
+import re
+
+D = []
 
 def sigmoid(z):
     sigmoide = 1.0 / (1.0 + np.exp(-z))
@@ -175,11 +177,7 @@ def calculateS(network):
 
 
 def gradient_verification(network, instances, isTest, alpha, networkPlus, networkMinus, networkClean,  E):
- 
-    inputs = []
-
     error, networkClean, fx = execute(networkClean, instances, isTest, alpha)
-   # errorClean = execute(networkClean, intances, inputs)
     networkPlus = copy.deepcopy(networkClean) 
     networkMinus = copy.deepcopy(networkClean)  
     
@@ -189,41 +187,31 @@ def gradient_verification(network, instances, isTest, alpha, networkPlus, networ
 
 
         for i in range(len(networkPlus.layers[j])):
-
             for k in range(len(networkPlus.layers[j][i])):
-                
-               # print(networkPlus.layers[j][i][k])
                 networkPlus.layers[j][i][k] += E
-               # print(networkPlus.layers[j][i][k])
                 errorPlus, networkPlus, fxPlus = execute(networkPlus, instances, isTest, alpha)
-               
-            #    J = errorPlus/len(instances)
-                
-           #     S = calculateS(networkPlus)
-            #    S *= networkPlus.lmbda/(len(instances)*2)
-           #     errorPlus = J+S
-                
-                
-                
                 networkMinus.layers[j][i][k] -= E
 
                 errorMinus, networkMinus, fxMinus  = execute(networkMinus, instances, isTest, alpha)
-            #    J = errorMinus/len(instances)
-            #    S = calculateS(networkMinus)
-             #   S *= networkMinus.lmbda/(len(instances)*2)
-             #   errorMinus = J+S
-                
-                
-                gradError += (errorPlus - errorMinus) / (2 * E) 
-                #print("grad: ",  gradError)
-
+                gradError += (errorPlus - errorMinus) / (2 * E)
 
         print("Theta: ", j," erro", gradError)
-
-    return gradError
-
-
-
+        
+        
+    print(networkClean.layers)    
+    
+#    D = networkClean.layers
+#        
+#    full_string = ""
+#    for l in range(len(D)):
+#        for c in range(len(D[l])):
+#            g = round(D[l][c], 5)
+#            full_string += str(g)
+#            full_string += '\t'
+#            print("g")
+#        full_string += '\n'
+#            
+#    print(full_string)
 
 
 def execute(network, instances, isTest, alpha):
@@ -271,6 +259,7 @@ def execute(network, instances, isTest, alpha):
         network.PrintNetwork()
         delta_y, aux = backPropagation(network, fx, outputs, inst)
         D.append(aux)
+        
     D = regularization(network,D,instances)
     
     J = error/len(instances)
@@ -283,24 +272,20 @@ def execute(network, instances, isTest, alpha):
         update_layers(alpha, network, D)
     
     #criação de arquivo de verificação numérica de gradiente
-    if(isTest):
-      #  print("Verificação numérica de gradiente:")
-#        print("D", D)
-       # f= open("verificacao_numerica_gradiente.txt","w+")
-#        print("len(D)", len(D))
+#    if(isTest):
+#        print("verificacao_numerica_gradiente")
+#        f= open("verificacao_numerica_gradiente.txt","w+")
         
-        full_string = ""
-        for l in range(len(D)):
-            for c in range(len(D[l])):
-                g = round(D[l][c], 5)
-                full_string += str(g)
-                full_string += '\t'
+#        full_string = ""
+#        for l in range(len(D)):
+#            for c in range(len(D[l])):
+#                g = round(D[l][c], 5)
+#                full_string += str(g)
+#                full_string += '\t'
 #                print("g")
-            full_string += '\n'
+#            full_string += '\n'
             
-       # print(full_string)  
-       # f.write(full_string)
-            
-        
+#    print(full_string)  
+#    f.write(full_string)
             
     return errorReg, network, fx

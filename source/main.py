@@ -111,10 +111,7 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
             networkPlus = Neural_Network(network_lambda, layers_size, layers)
             networkMinus = Neural_Network(network_lambda, layers_size, layers)
             networkClean = Neural_Network(network_lambda, layers_size, layers)
-            err = back_propagation.gradient_verification(network, dataset_file_lines, isTest, alpha,networkPlus, networkMinus,networkClean,  0.000001)
-        
-        
-        
+            back_propagation.gradient_verification(network, dataset_file_lines, isTest, alpha,networkPlus, networkMinus,networkClean,  0.000001)
     
         #chama algoritmo de bajpropagation passando a rede e as instancias de treinamento
         errorReg, network, fx = back_propagation.execute(neural_network, dataset_file_lines, isTest, alpha)
@@ -162,9 +159,7 @@ def save_results(neural_network_structure, vp, vn, fp, fn, usedAlpha, conParada)
     full_string += '\n'
     full_string += "FN: "
     full_string += str(fn)
-    full_string += '\n\n'
-    
-    
+    full_string += '\n\n'  
     
     with open("Results.txt","a+") as f:
         f.write(full_string)
