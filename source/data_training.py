@@ -20,7 +20,7 @@ def DataRead(str1):
     if(tablePath == "..\data\pima.tsv"):
         dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\\t",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     else:
-        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
+        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,;",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     return dataTable
 
 def normalizeTable(table, minNumber, maxNumber):

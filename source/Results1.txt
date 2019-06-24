@@ -1,0 +1,285 @@
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 34
+VP: 209
+VN: 101
+FP: 25
+FN: 16
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 2
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 212
+VN: 101
+FP: 25
+FN: 13
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 3
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 209
+VN: 101
+FP: 25
+FN: 16
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 69
+VP: 215
+VN: 109
+FP: 17
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 2
+Camada oculta. Neurônios : 69
+Camada oculta. Neurônios : 69
+VP: 215
+VN: 109
+FP: 17
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 3
+Camada oculta. Neurônios : 69
+Camada oculta. Neurônios : 69
+Camada oculta. Neurônios : 69
+VP: 215
+VN: 108
+FP: 18
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 34
+VP: 207
+VN: 102
+FP: 24
+FN: 18
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 2
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 209
+VN: 101
+FP: 25
+FN: 16
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 3
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 209
+VN: 100
+FP: 26
+FN: 16
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 69
+VP: 215
+VN: 109
+FP: 17
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 2
+Camada oculta. Neurônios : 69
+Camada oculta. Neurônios : 69
+VP: 215
+VN: 108
+FP: 18
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.2
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 3
+Camada oculta. Neurônios : 69
+Camada oculta. Neurônios : 69
+Camada oculta. Neurônios : 69
+VP: 215
+VN: 108
+FP: 18
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.4
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 34
+VP: 215
+VN: 107
+FP: 19
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.4
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 2
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 215
+VN: 108
+FP: 18
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.4
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 3
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 215
+VN: 106
+FP: 20
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.25
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 34
+VP: 212
+VN: 104
+FP: 22
+FN: 13
+
+Condição de parada difJ < 0.00015
+Alpha: 0.25
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 2
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 214
+VN: 104
+FP: 22
+FN: 11
+
+Condição de parada difJ < 0.00015
+Alpha: 0.25
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 3
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 214
+VN: 103
+FP: 23
+FN: 11
+
+Condição de parada difJ < 0.00015
+Alpha: 0.25
+Fator de Regularização : 0.1
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 69
+VP: 215
+VN: 110
+FP: 16
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.25
+Fator de Regularização : 0.25
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 1
+Camada oculta. Neurônios : 34
+VP: 212
+VN: 103
+FP: 23
+FN: 13
+
+Condição de parada difJ < 0.00015
+Alpha: 0.25
+Fator de Regularização : 0.25
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 2
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 215
+VN: 104
+FP: 22
+FN: 10
+
+Condição de parada difJ < 0.00015
+Alpha: 0.25
+Fator de Regularização : 0.25
+Quantidade de entradas : 34
+Quantidade de saídas: 1
+Quantidade de camadas ocultas: 3
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+Camada oculta. Neurônios : 34
+VP: 214
+VN: 106
+FP: 20
+FN: 11
+

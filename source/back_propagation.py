@@ -18,6 +18,7 @@ def error_j(fx, expected, size_dataset):
     y = np.array(expected, dtype=np.float64)
     #print("YYY", y)
     j_vector = -y * np.log(fx) - (np.ones(y.size) - y) * np.log(np.ones(y.size) - fx)
+     #np.dot(-y,  np.log(fx)) - np.dot((np.ones(y.size) - y) , np.log(np.ones(y.size) - fx))
     j = np.sum(j_vector)
     #j /= size_dataset
     return j
@@ -173,45 +174,48 @@ def calculateS(network):
 
 
 
-def gradient_verification(network, instances, isTest, alpha, networkPlus, networkMinus,  E):
+def gradient_verification(network, instances, isTest, alpha, networkPlus, networkMinus, networkClean,  E):
  
     inputs = []
 
-
+    error, networkClean, fx = execute(networkClean, instances, isTest, alpha)
    # errorClean = execute(networkClean, intances, inputs)
-
-
-    for j in range(len(networkPlus.layers)-1):
+    networkPlus = copy.deepcopy(networkClean) 
+    networkMinus = copy.deepcopy(networkClean)  
+    
+    for j in range(len(networkPlus.layers)):
 
         gradError = 0
 
 
-        for i in range(len(networkPlus.layers[j])-1):
+        for i in range(len(networkPlus.layers[j])):
 
-            for k in range(len(networkPlus.layers[j][i])-1):
+            for k in range(len(networkPlus.layers[j][i])):
                 
-                
+               # print(networkPlus.layers[j][i][k])
                 networkPlus.layers[j][i][k] += E
+               # print(networkPlus.layers[j][i][k])
                 errorPlus, networkPlus, fxPlus = execute(networkPlus, instances, isTest, alpha)
                
-                J = errorPlus/len(instances)
-                S = calculateS(networkPlus)
-                S *= networkPlus.lmbda/(len(instances)*2)
-                errorPlus = J+S
+            #    J = errorPlus/len(instances)
+                
+           #     S = calculateS(networkPlus)
+            #    S *= networkPlus.lmbda/(len(instances)*2)
+           #     errorPlus = J+S
                 
                 
                 
                 networkMinus.layers[j][i][k] -= E
 
                 errorMinus, networkMinus, fxMinus  = execute(networkMinus, instances, isTest, alpha)
-                J = errorMinus/len(instances)
-                S = calculateS(networkMinus)
-                S *= networkMinus.lmbda/(len(instances)*2)
-                errorMinus = J+S
+            #    J = errorMinus/len(instances)
+            #    S = calculateS(networkMinus)
+             #   S *= networkMinus.lmbda/(len(instances)*2)
+             #   errorMinus = J+S
                 
                 
                 gradError += (errorPlus - errorMinus) / (2 * E) 
-
+                #print("grad: ",  gradError)
 
 
         print("Theta: ", j," erro", gradError)
@@ -280,9 +284,9 @@ def execute(network, instances, isTest, alpha):
     
     #criação de arquivo de verificação numérica de gradiente
     if(isTest):
-        print("Verificação numérica de gradiente:")
+      #  print("Verificação numérica de gradiente:")
 #        print("D", D)
-        f= open("verificacao_numerica_gradiente.txt","w+")
+       # f= open("verificacao_numerica_gradiente.txt","w+")
 #        print("len(D)", len(D))
         
         full_string = ""
@@ -294,8 +298,8 @@ def execute(network, instances, isTest, alpha):
 #                print("g")
             full_string += '\n'
             
-        print(full_string)  
-        f.write(full_string)
+       # print(full_string)  
+       # f.write(full_string)
             
         
             

@@ -17,14 +17,14 @@ from neural_network import Neural_Network
 
 
 numFolds=10
-alpha=0.2
+alpha=0.4
 numAlpha = 3
 numFR = 3
 numCamadas = 3
 numParada = 3
 conParada = 0.00015
 tamCamadas = 3
-initFR=0.100
+initFR=0.250
 
 
 def categoricVotation(network, testFold, targetFeature, testDataset):
@@ -108,7 +108,8 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
         
         networkPlus = Neural_Network(network_lambda, layers_size, layers)
         networkMinus = Neural_Network(network_lambda, layers_size, layers)
-       # err = back_propagation.gradient_verification(network, dataset_file_lines, False, alpha,networkPlus, networkMinus,  0.000001)
+        networkClean = Neural_Network(network_lambda, layers_size, layers)
+        err = back_propagation.gradient_verification(network, dataset_file_lines, isTest, alpha,networkPlus, networkMinus,networkClean,  0.000001)
         
         
         
@@ -196,13 +197,20 @@ def execute_once(neural_network_structure, alpha, folds, condParada):
         
         print("Executing with fold number: ", i, " and neural_network_structure=", neural_network_structure)
         errorReg,network,fx = initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False)
+        negPosError = 0
+        lastDifError = 0
         difError=errorReg
-        while (abs(difError)>condParada):
+        while (abs(difError)>condParada and negPosError < 6):
             difError=errorReg
             network.a=[]
             network.z=[]
             errorReg,network,fx = initialize_network_for_validation(neural_network_structure, empty_initial_weights, fixed_dataset, False, network)
             difError-=errorReg
+            if ((lastDifError > 0 and difError < 0) or (lastDifError < 0 and difError > 0)):
+                negPosError += 1
+            else:
+                negPosError = 0
+            lastDifError = difError
             #print("Fx: ", fx)
             print("difError: ", difError)
         answers,correct = categoricVotation(network,testFold,table.columns.size -1, test_dataset)
