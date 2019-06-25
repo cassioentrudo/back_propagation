@@ -114,10 +114,10 @@ def initialize_network_for_validation(network_file_lines, initial_weights_file_l
             back_propagation.gradient_verification(network, dataset_file_lines, isTest, alpha,networkPlus, networkMinus,networkClean,  0.000001)
     
         #chama algoritmo de bajpropagation passando a rede e as instancias de treinamento
-        errorReg, network, fx = back_propagation.execute(neural_network, dataset_file_lines, isTest, alpha)
+        errorReg, network, fx, D = back_propagation.execute(neural_network, dataset_file_lines, isTest, alpha)
         
     else:
-        errorReg, network, fx = back_propagation.execute(network, dataset_file_lines, isTest, alpha)
+        errorReg, network, fx, D = back_propagation.execute(network, dataset_file_lines, isTest, alpha)
     
     return errorReg, network, fx
 

@@ -177,7 +177,8 @@ def calculateS(network):
 
 
 def gradient_verification(network, instances, isTest, alpha, networkPlus, networkMinus, networkClean,  E):
-    error, networkClean, fx = execute(networkClean, instances, isTest, alpha)
+    error, networkClean, fx, D = execute(networkClean, instances, isTest, alpha)
+    print(D)   
     networkPlus = copy.deepcopy(networkClean) 
     networkMinus = copy.deepcopy(networkClean)  
     
@@ -189,16 +190,16 @@ def gradient_verification(network, instances, isTest, alpha, networkPlus, networ
         for i in range(len(networkPlus.layers[j])):
             for k in range(len(networkPlus.layers[j][i])):
                 networkPlus.layers[j][i][k] += E
-                errorPlus, networkPlus, fxPlus = execute(networkPlus, instances, isTest, alpha)
+                errorPlus, networkPlus, fxPlus, Derror1 = execute(networkPlus, instances, isTest, alpha)
                 networkMinus.layers[j][i][k] -= E
 
-                errorMinus, networkMinus, fxMinus  = execute(networkMinus, instances, isTest, alpha)
+                errorMinus, networkMinus, fxMinus, Derror2  = execute(networkMinus, instances, isTest, alpha)
                 gradError += (errorPlus - errorMinus) / (2 * E)
 
         print("Theta: ", j," erro", gradError)
         
         
-    print(networkClean.layers)    
+     
     
 #    D = networkClean.layers
 #        
@@ -256,7 +257,7 @@ def execute(network, instances, isTest, alpha):
         
         error += error_j(fx, outputs, len(instances))
         
-        network.PrintNetwork()
+        #network.PrintNetwork()
         delta_y, aux = backPropagation(network, fx, outputs, inst)
         D.append(aux)
         
@@ -288,4 +289,4 @@ def execute(network, instances, isTest, alpha):
 #    print(full_string)  
 #    f.write(full_string)
             
-    return errorReg, network, fx
+    return errorReg, network, fx, D
