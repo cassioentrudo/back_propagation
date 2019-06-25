@@ -28,52 +28,31 @@ def error_j(fx, expected, size_dataset):
 def inputs_propagation(network, instance, inputs):
     auxa = []
     auxz = []
-    network1 = network.layers
     #criando vetor a
     a = np.zeros((int(network.layers_size[0])+1, 1)).ravel()
     a[0] = 1 #bias
-    #a = np.transpose()
-    #a = a.reshape((a.shape[0], 1))
+
         
     for j in range(len(inputs)):
-        #print("input=", np.round(inputs[j], 5))
+
         a[j + 1] = np.round(inputs[j],5)
     auxa.append(a)
     for i in range(len(network.layers_size)-1):
-        #print("\n\n########################################################################")
-        #print("layer:", i+1)            
-        #print("quantidade de neuronios=", network.layers_size[i]) 
-        #print("vetor_a=", a)
-        #vetor com pesos
-        #layer = np.ndarray([len(inputs), len(network.layers_size)])
         layer = network.layers[i] #.astype
-       # print("layer=", layer)
-       # print("a=", a)
-        #print("layer_T=", np.transpose(layer))
         z = np.dot(layer, a)
-        #z = layer*a
-      #  print("vetor_z=", z)
         auxz.append(z)
 
         a = sigmoid(z)
         
         if(i!=len(network.layers_size)-2):
-            a = np.insert(a, 0, 1)
-            #a = np.matrix(a)
-            #a = np.transpose(a)
-            #a = np.matrix(a)
-            #a[0] = np.insert(a[0],0,1).T
+            a = np.insert(a, 0, 1)       
         
-        
-        #a = a.flatten()
-        #a = a.T
-       # a = a.ravel()
         auxa.append(a)
-        #print("out", new_inputs)
+
         inputs = a
     network.a.append(auxa)
     network.z.append(auxz)
-    #print("fim")
+    
     return inputs
  
 def backPropagation(network, fx, y, inst):
@@ -178,9 +157,20 @@ def calculateS(network):
 
 def gradient_verification(network, instances, isTest, alpha, networkPlus, networkMinus, networkClean,  E):
     error, networkClean, fx, D = execute(networkClean, instances, isTest, alpha)
-    print(D)   
     networkPlus = copy.deepcopy(networkClean) 
-    networkMinus = copy.deepcopy(networkClean)  
+    networkMinus = copy.deepcopy(networkClean)
+    
+    full_string = ""
+    for l in range(len(D)):
+        for c in range(len(D[l])):
+            g = round(D[l][c], 5)
+            full_string += str(g)
+            full_string += '\t'
+        full_string += '\n'
+    
+    full_string += '\n'
+            
+    print(full_string)
     
     for j in range(len(networkPlus.layers)):
 
@@ -197,23 +187,15 @@ def gradient_verification(network, instances, isTest, alpha, networkPlus, networ
                 gradError += (errorPlus - errorMinus) / (2 * E)
 
         print("Theta: ", j," erro", gradError)
-        
-        
-     
-    
-#    D = networkClean.layers
-#        
-#    full_string = ""
-#    for l in range(len(D)):
-#        for c in range(len(D[l])):
-#            g = round(D[l][c], 5)
-#            full_string += str(g)
-#            full_string += '\t'
-#            print("g")
-#        full_string += '\n'
-#            
-#    print(full_string)
+        full_string += "Theta: "
+        full_string += str(j)
+        full_string += " Erro: "
+        full_string += str(gradError)
+        full_string += '\n'
 
+        
+    f = open("verificacao_numerica_gradiente.txt","w+")
+    f.write(full_string)
 
 def execute(network, instances, isTest, alpha):
     D=[]
@@ -271,22 +253,5 @@ def execute(network, instances, isTest, alpha):
     
     if(len(instances)>=1):
         update_layers(alpha, network, D)
-    
-    #criação de arquivo de verificação numérica de gradiente
-#    if(isTest):
-#        print("verificacao_numerica_gradiente")
-#        f= open("verificacao_numerica_gradiente.txt","w+")
-        
-#        full_string = ""
-#        for l in range(len(D)):
-#            for c in range(len(D[l])):
-#                g = round(D[l][c], 5)
-#                full_string += str(g)
-#                full_string += '\t'
-#                print("g")
-#            full_string += '\n'
-            
-#    print(full_string)  
-#    f.write(full_string)
             
     return errorReg, network, fx, D

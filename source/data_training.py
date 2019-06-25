@@ -17,10 +17,12 @@ tablePath = "../data/ionosphere.data"
 #vetor que contem a estrutura da rede (camadas e neuronios por camada)
 
 def DataRead(str1):
-    if(tablePath == "..\data\pima.tsv"):
+    if(tablePath == "..\data\pima.tsv" or tablePath == "../data/pima.tsv"):
         dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\\t",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
+    elif (tablePath == "..\data\ionosphere.data" or tablePath == "../data/ionosphere.data"):
+        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     else:
-        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\,;",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
+        dataTable = pd.read_csv("%s" % str1,header=None, sep="\s*\;",  engine='python') #PARA ATRIBUTOS NUMÉRICOS
     return dataTable
 
 def normalizeTable(table, minNumber, maxNumber):
@@ -60,7 +62,6 @@ if (tablePath == "..\data\wine.data"):
     table["result"]=aux
     
 if (tablePath == "../data/ionosphere.data" or tablePath == "..\data\ionosphere.data"):
-    print("Adjusting ionosphere dataset")
     table = table.replace('g',1)
     table = table.replace('b',0)
     
